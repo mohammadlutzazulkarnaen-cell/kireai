@@ -30,10 +30,10 @@ jobs:
       # Static build: analysis runs in the browser, data stays on the device.
       - run: npm run build:pages
 
-      # Deep links (/app/dashboard, /app/analysis/3, ...) are served by React
-      # Router; GitHub Pages answers unknown paths with 404.html, so it gets a
-      # copy of the shell and the app renders the requested route.
-      - name: SPA fallback for deep links
+      # Routes live in the hash (#/app/dashboard), so normal navigation never
+      # asks GitHub Pages for a missing file. This copy is only a safety net for
+      # links written without the hash.
+      - name: SPA fallback for hashless links
         run: cp client/dist/index.html client/dist/404.html
 
       - uses: actions/configure-pages@v5
