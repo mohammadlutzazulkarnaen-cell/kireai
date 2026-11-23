@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Check, Loader2, ScanText, AlertTriangle, ArrowLeft, RotateCw } from 'lucide-react';
 import { api } from '../lib/api.js';
+import { LOCAL_MODE } from '../lib/runtime.js';
 import { Alert, Button, Card, PageHeader, ProgressBar, Spinner } from '../components/ui.jsx';
 import { cn } from '../components/ui.jsx';
 
@@ -57,7 +58,11 @@ export default function Processing() {
       <PageHeader
         eyebrow="Pemrosesan"
         title="Menganalisis dokumen Anda"
-        subtitle="Proses berjalan di server. Anda boleh menunggu di halaman ini — hasil akan terbuka otomatis."
+        subtitle={
+          LOCAL_MODE
+            ? 'Proses berjalan di perangkat Anda. Anda boleh menunggu di halaman ini — hasil akan terbuka otomatis.'
+            : 'Proses berjalan di server. Anda boleh menunggu di halaman ini — hasil akan terbuka otomatis.'
+        }
         actions={<Button variant="ghost" to="/app/dashboard" icon={ArrowLeft}>Dashboard</Button>}
       />
 
@@ -157,15 +162,17 @@ export default function Processing() {
           <Card className="p-5">
             <h2 className="text-[14px] font-semibold text-ink-900">Boleh ditinggal?</h2>
             <p className="mt-2 text-[12.5px] leading-relaxed text-ink-500">
-              Ya. Analisis berjalan di server; Anda dapat menutup halaman dan membuka hasilnya nanti dari riwayat
-              pemeriksaan. Status akan tetap tersimpan.
+              {LOCAL_MODE
+                ? 'Ya. Analisis berjalan di perangkat Anda; hasilnya tersimpan di browser ini dan bisa dibuka lagi kapan saja dari riwayat pemeriksaan.'
+                : 'Ya. Analisis berjalan di server; Anda dapat menutup halaman dan membuka hasilnya nanti dari riwayat pemeriksaan. Status akan tetap tersimpan.'}
             </p>
             <Button to="/app/history" variant="outline" size="sm" className="mt-4">Buka riwayat</Button>
           </Card>
 
           {!failed && status.status !== 'completed' ? (
             <div className="flex items-center gap-2 px-1 text-[11.5px] text-ink-400">
-              <Spinner className="h-3.5 w-3.5" /> Menunggu server menyelesaikan analisis…
+              <Spinner className="h-3.5 w-3.5" />{' '}
+              {LOCAL_MODE ? 'Menunggu analisis selesai…' : 'Menunggu server menyelesaikan analisis…'}
             </div>
           ) : null}
         </div>

@@ -4,6 +4,7 @@ import {
   ArrowLeft, Check, Eye, EyeOff, GitCompareArrows, PenLine, RotateCcw, Save, Sparkles, Undo2, AlertTriangle, Loader2,
 } from 'lucide-react';
 import { api } from '../lib/api.js';
+import { LOCAL_MODE } from '../lib/runtime.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import { LEVELS, formatDate, levelMeta, splitDraft, wordDiff } from '../lib/format.js';
 import { Alert, Button, Card, LevelPill, Modal, PageHeader, Spinner, useToast, cn } from '../components/ui.jsx';
@@ -461,7 +462,7 @@ export default function Editor() {
               </p>
               <ul className="mt-4 space-y-2.5 text-[11.5px] leading-relaxed text-ink-600">
                 <li className="flex gap-2"><span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent-500" />Tulisan Anda tidak pernah diubah otomatis.</li>
-                <li className="flex gap-2"><span className="mt-1.5 h-1 w-1 rounded-full bg-accent-500" />Draf disimpan di server dan hanya terlihat oleh akun Anda.</li>
+                <li className="flex gap-2"><span className="mt-1.5 h-1 w-1 rounded-full bg-accent-500" />{LOCAL_MODE ? 'Draf disimpan di browser ini dan hanya terlihat oleh akun Anda.' : 'Draf disimpan di server dan hanya terlihat oleh akun Anda.'}</li>
                 <li className="flex gap-2"><span className="mt-1.5 h-1 w-1 rounded-full bg-accent-500" />Analisis ulang membuat pemeriksaan baru; hasil lama tetap tersimpan.</li>
               </ul>
             </Card>

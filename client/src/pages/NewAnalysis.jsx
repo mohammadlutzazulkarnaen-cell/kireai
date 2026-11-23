@@ -4,6 +4,7 @@ import {
   UploadCloud, FileText, FileType2, File, X, CheckCircle2, ArrowRight, RefreshCcw, ShieldCheck, Info,
 } from 'lucide-react';
 import { api, uploadDocument } from '../lib/api.js';
+import { LOCAL_MODE } from '../lib/runtime.js';
 import { formatBytes, formatDate } from '../lib/format.js';
 import { Alert, Badge, Button, Card, PageHeader, ProgressBar, useToast, cn } from '../components/ui.jsx';
 
@@ -282,8 +283,10 @@ export default function NewAnalysis() {
           <Card className="flex items-start gap-3 p-4">
             <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#2F9E64]" />
             <p className="text-[12px] leading-relaxed text-ink-500">
-              File diproses di server kirAI dan tidak dibagikan ke pihak lain. Teks tersimpan terikat ke akun Anda dan
-              dapat dihapus permanen dari halaman <span className="font-medium text-ink-700">My Documents</span> kapan saja.
+              {LOCAL_MODE
+                ? 'File diproses langsung di browser Anda dan tidak dikirim ke server mana pun. Teks tersimpan di perangkat ini dan dapat dihapus permanen dari halaman '
+                : 'File diproses di server kirAI dan tidak dibagikan ke pihak lain. Teks tersimpan terikat ke akun Anda dan dapat dihapus permanen dari halaman '}
+              <span className="font-medium text-ink-700">My Documents</span> kapan saja.
             </p>
           </Card>
         </div>

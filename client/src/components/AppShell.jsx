@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
 import { AVATAR_COLORS, initials } from '../lib/format.js';
+import { LOCAL_MODE } from '../lib/runtime.js';
 import { Button, cn } from './ui.jsx';
 
 const NAV = [
@@ -100,7 +101,9 @@ function SidebarContent({ onNavigate }) {
             Privasi terjaga
           </div>
           <p className="mt-1 text-[11px] leading-relaxed text-ink-500">
-            Dokumen hanya dapat diakses akun Anda dan diproses di server kirAI.
+            {LOCAL_MODE
+              ? 'Dokumen hanya dapat diakses akun Anda dan tersimpan di browser ini.'
+              : 'Dokumen hanya dapat diakses akun Anda dan diproses di server kirAI.'}
           </p>
         </div>
       </div>

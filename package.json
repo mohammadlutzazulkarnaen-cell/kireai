@@ -12,6 +12,8 @@
     "dev:server": "node --watch server/index.js",
     "dev:client": "vite client",
     "build": "vite build client",
+    "build:pages": "vite build client --mode pages --base=/kireai/",
+    "preview:pages": "vite preview client --mode pages --base=/kireai/",
     "start": "node server/index.js"
   },
   "dependencies": {
@@ -20,14 +22,15 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^0.468.0",
     "mammoth": "^1.8.0",
     "multer": "^2.0.1",
     "pdfjs-dist": "^4.10.38",
     "pdfkit": "^0.15.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.28.0",
-    "lucide-react": "^0.468.0"
+    "react-router-dom": "^6.28.0"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.3.4",

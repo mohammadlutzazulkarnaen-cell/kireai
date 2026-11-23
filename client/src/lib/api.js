@@ -1,12 +1,21 @@
-export class ApiError extends Error {
-  constructor(message, status = 0) {
-    super(message);
-    this.name = 'ApiError';
-    this.status = status;
-  }
-}
+import { ApiError } from './errors.js';
+
+export { ApiError };
+
+/**
+ * Two transports, one surface:
+ * - server build: HTTP to the Express API with a session cookie.
+ * - "pages" build (GitHub Pages): the same routes handled in the browser by
+ *   ./local/backend.js, with IndexedDB storage and on-device analysis.
+ */
+const LOCAL = import.meta.env.MODE === 'pages';
 
 async function request(path, { method = 'GET', body, headers } = {}) {
+  if (LOCAL) {
+    const backend = await import('./local/backend.js');
+    return backend.request(method, path, body);
+  }
+
   const isForm = body instanceof FormData;
   let response;
   try {
@@ -45,6 +54,10 @@ export const api = {
 };
 
 export function uploadDocument(file, onProgress) {
+  if (LOCAL) {
+    return import('./local/backend.js').then((backend) => backend.uploadDocument(file, onProgress));
+  }
+
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '/api/documents');
@@ -75,8 +88,24 @@ export function uploadDocument(file, onProgress) {
   });
 }
 
-/** Reports are served by the API with the session cookie, so a plain link works. */
+/**
+ * Server build: reports are served by the API with the session cookie, so a
+ * plain link works. Pages build: the PDF is drawn in the browser and saved.
+ */
 export function downloadReport(analysisId, filename) {
+  if (LOCAL) {
+    return (async () => {
+      const [backend, report] = await Promise.all([
+        import('./local/backend.js'),
+        import('./local/report.js'),
+      ]);
+      const data = await backend.getReportData(analysisId);
+      report.buildReportPdf(data).save(filename || report.reportFilename(data.document.name));
+    })().catch((error) => {
+      window.alert(`Laporan gagal dibuat: ${error.message}`);
+    });
+  }
+
   const link = document.createElement('a');
   link.href = `/api/analyses/${analysisId}/report.pdf`;
   link.download = filename || 'kirAI-report.pdf';

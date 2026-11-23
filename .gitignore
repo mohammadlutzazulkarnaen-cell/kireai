@@ -5,3 +5,6 @@ server/data/
 .env.local
 *.log
 .DS_Store
+
+# local preview artifacts
+.tmp-*
