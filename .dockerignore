@@ -1,0 +1,13 @@
+node_modules
+client/dist
+server/data
+.git
+.gitignore
+*.log
+.env
+.env.*
+overview-*.png
+.tmp-*
+Dockerfile
+.dockerignore
+render.yaml

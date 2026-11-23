@@ -1,0 +1,21 @@
+# Render Blueprint for kirAI.
+# Deploy: Render Dashboard -> New -> Blueprint -> pick this repository.
+# A persistent disk is required (SQLite); Render disks need a paid instance.
+services:
+  - type: web
+    name: kireai
+    runtime: docker
+    plan: starter
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+    disk:
+      name: kireai-data
+      mountPath: /app/server/data
+      sizeGB: 1
